@@ -53,7 +53,10 @@ struct SharedState {
     midi_in(0),
     dpms_thread(0),
     song_speed(100),
-    base_volume(1)
+    base_volume(1),
+    min_key(0),
+    max_key(200),
+    show_key_names(true)
     {}
 
   Midi *midi;
@@ -65,6 +68,9 @@ struct SharedState {
 
   int song_speed;
   double base_volume;
+  int min_key;
+  int max_key;
+  bool show_key_names;
 
   std::vector<Track::Properties> track_properties;
   std::string song_title;

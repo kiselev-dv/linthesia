@@ -46,6 +46,7 @@ private:
 
   ButtonState m_continue_button;
   ButtonState m_back_button;
+  ButtonState m_options_button;
 
   SharedState m_state;
 

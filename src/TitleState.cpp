@@ -141,6 +141,10 @@ void TitleState::Init() {
                                  input_devices,
                                  GetTexture(InterfaceButtons),
                                  GetTexture(InputBox));
+
+   m_options_button = ButtonState((GetStateWidth() - StringTileWidth) / 2,
+                                initial_y + each_y*3,
+                                Layout::ButtonWidth, Layout::ButtonHeight);
 }
 
 void TitleState::Resize() {
@@ -156,6 +160,9 @@ void TitleState::Resize() {
     
     m_input_tile->SetX((GetStateWidth() - DeviceTileWidth) / 2);
     m_input_tile->SetY(initial_y + each_y*2);
+
+    m_options_button.SetX((GetStateWidth() - DeviceTileWidth) / 2);
+    m_options_button.SetY(initial_y + each_y*3);
 
     m_back_button.SetX(Layout::ScreenMarginX);
     m_back_button.SetY(GetStateHeight() - Layout::ScreenMarginY / 2 - Layout::ButtonHeight / 2);
@@ -179,6 +186,7 @@ void TitleState::Update() {
 
   m_continue_button.Update(mouse);
   m_back_button.Update(mouse);
+  m_options_button.Update(mouse);
 
   MouseInfo output_mouse(mouse);
   output_mouse.x -= m_output_tile->GetX();
@@ -339,6 +347,9 @@ void TitleState::Update() {
 
    if (m_continue_button.hovering)
      m_tooltip = "Click to continue on to the track selection screen.";
+  
+   if (m_options_button.hovering)
+     m_tooltip = "Click to change options.";
 
    if (m_file_tile->WholeTile().hovering)
      m_tooltip = "Click to choose a different MIDI file.";
@@ -410,6 +421,7 @@ void TitleState::Draw(Renderer &renderer) const {
 
   Layout::DrawButton(renderer, m_continue_button, GetTexture(ButtonChooseTracks));
   Layout::DrawButton(renderer, m_back_button, GetTexture(ButtonExit));
+  Layout::DrawButton(renderer, m_options_button, GetTexture(ButtonExit));
 
   m_output_tile->Draw(renderer);
   m_input_tile->Draw(renderer);

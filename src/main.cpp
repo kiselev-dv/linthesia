@@ -478,9 +478,6 @@ int main(int argc, char *argv[]) {
       }
     }
 
-    UserSetting::Set("min_key", "");
-    UserSetting::Set("max_key", "");
-
     if (cmdOptionExists(argv, argv+argc, "--min-key")) {
       string min_key = STRING(getCmdOption(argv, argv + argc, "--min-key"));
       UserSetting::Set("min_key", min_key);
@@ -489,6 +486,15 @@ int main(int argc, char *argv[]) {
     if (cmdOptionExists(argv, argv+argc, "--max-key")) {
       string max_key = STRING(getCmdOption(argv, argv + argc, "--max-key"));
       UserSetting::Set("max_key", max_key);
+    }
+
+    string mxkeys = UserSetting::Get("max_key", "");
+    if (!mxkeys.empty()) {
+      state.max_key = std::stoi(mxkeys);
+    }
+    string mnkeys = UserSetting::Get("min_key", "");
+    if (!mnkeys.empty()) {
+      state.min_key = std::stoi(mnkeys);
     }
 
     Glib::signal_timeout().connect(sigc::mem_fun(da, &DrawingArea::GameLoop), 1000/rate);
