@@ -2,20 +2,14 @@
 
 // Linthesia
 
-#include "SongLibState.h"
+#include "OptionsState.h"
 #include "Textures.h"
 #include "UserSettings.h"
 #include "MenuLayout.h"
 #include "TitleState.h"
 #include "LinthesiaError.h"
 
-#include "libmidi/Midi.h"
-
-#include <dirent.h>
-
 using namespace std;
-
-const static string SONG_LIB_DIR_SETTINGS_KEY = "song_lib_last_dir";
 
 void SongLibState::Init() {
 
