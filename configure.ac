@@ -27,6 +27,17 @@ AC_ARG_WITH(
 )
 AC_SUBST([graphdir])
 
+AC_ARG_WITH(
+    [musicdir],
+    [AS_HELP_STRING([--with-musicdir=<path to midi files dir>],[package music library from this dir, default: $(pkgdatadir)/music])],
+    [musicdir="${with_musicdir}"],
+    [musicdir="\$(pkgdatadir)/music"]
+)
+AC_SUBST([musicdir])
+
+AM_PATH_PYTHON([2.7],, [:])
+AX_PYTHON_DEVEL
+
 # Checks for programs.
 AC_PROG_CXX
 AC_PROG_INSTALL

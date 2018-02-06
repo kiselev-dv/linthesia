@@ -62,10 +62,17 @@ noinst_HEADERS +=		CompatibleSystem.h \
 				UserSettings.h \
 				Version.h
 
-linthesia_LDFLAGS = @GTKMM_LIBS@ @GCONFMM_LIBS@ @GTKGLEXTMM_LIBS@ @ALSA_LIBS@
-linthesia_LDADD = libmidi.la
-linthesia_CXXFLAGS = -std=c++11 -iquote $(srcdir)/libmidi
-linthesia_CPPFLAGS = @GTKMM_CFLAGS@ @GCONFMM_CFLAGS@ @GTKGLEXTMM_CFLAGS@ @ALSA_CFLAGS@ -DGRAPHDIR="\"${graphdir}\"" -DSCRIPTDIR="\"${scriptdir}\""
+PYTHON = /usr/bin/python
+PYTHON_CPPFLAGS = -I/usr/include/python2.7
+PYTHON_LDFLAGS = -L/usr/lib -lpython2.7
+PYTHON_PREFIX = ${prefix}
+PYTHON_SITE_PKG = /usr/lib/python2.7/dist-packages
+PYTHON_VERSION = 2.7
+
+linthesia_LDFLAGS = -L/usr/lib -lpython2.7 @GTKMM_LIBS@ @GCONFMM_LIBS@ @GTKGLEXTMM_LIBS@ @ALSA_LIBS@
+linthesia_LDADD = libmidi.la -lpython2.7
+linthesia_CXXFLAGS = -L/usr/lib/python2.7/config -I/usr/include/python2.7 -std=c++11 -iquote $(srcdir)/libmidi
+linthesia_CPPFLAGS = @GTKMM_CFLAGS@ @GCONFMM_CFLAGS@ @GTKGLEXTMM_CFLAGS@ @ALSA_CFLAGS@ -DMUSICDIR="\"${musicdir}\"" -DGRAPHDIR="\"${graphdir}\"" -DSCRIPTDIR="\"${scriptdir}\""
 
 ctags-dependencies:
 	@$(CC) -M -std=c++11 -I/usr/include @GTKMM_CFLAGS@ @GCONFMM_CFLAGS@ @GTKGLEXTMM_CFLAGS@ @ALSA_CFLAGS@ \

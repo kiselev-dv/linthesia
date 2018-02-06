@@ -5,6 +5,7 @@
 // Copyright (c) 2007 Nicholas Piegdon
 // Adaptation to GNU/Linux by Oscar Aceña
 // See COPYING for license information
+#include <Python.h>
 
 #include <string>
 
@@ -29,6 +30,10 @@
 
 #ifndef GRAPHDIR
 #define GRAPHDIR "../graphics"
+#endif
+
+#ifndef MUSICDIR
+#define MUSICDIR "../music"
 #endif
 
 using namespace std;
@@ -357,6 +362,8 @@ int main(int argc, char *argv[]) {
   Gtk::Main main_loop(argc, argv);
   Gtk::GL::init(argc, argv);
 
+  Py_Initialize();
+
   try {
     string file_opt("");
 
@@ -497,7 +504,9 @@ int main(int argc, char *argv[]) {
     window_state.Deactivate();
 
     delete dpms_thread;
-
+    
+    Py_Finalize();
+    
     return 0;
   }
 
