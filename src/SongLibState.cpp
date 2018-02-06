@@ -2,6 +2,7 @@
 
 // Linthesia
 
+#include <Python.h>
 #include "SongLibState.h"
 #include "Textures.h"
 #include "UserSettings.h"
@@ -15,7 +16,49 @@
 
 using namespace std;
 
-const static string SONG_LIB_DIR_SETTINGS_KEY = "song_lib_last_dir";
+static const string SONG_LIB_DIR_SETTINGS_KEY = "song_lib_last_dir";
+static const char* PLUGIN_NAME = "songlib";
+
+Song CallPlugInListSongs(const std::string& base_path, const std::string& curent_path)
+{
+    PyObject* name = PyString_FromString(PLUGIN_NAME);
+    PyObject* pluginModule = PyImport_Import(name);
+    Py_DECREF(name);
+    if (!pluginModule)
+    {
+        PyErr_Print();
+    }
+    PyObject* filterFunc = PyObject_GetAttrString(pluginModule, "filterFunc");
+    Py_DECREF(pluginModule);
+    if (!filterFunc)
+    {
+        PyErr_Print();
+    }
+    PyObject* args = Py_BuildValue("(s, s)", base_path.c_str(), curent_path.c_str());
+    if (!args)
+    {
+        PyErr_Print();
+        Py_DECREF(filterFunc);
+    }
+    PyObject* resultObj = PyObject_CallObject(filterFunc, args);
+    Py_DECREF(filterFunc);
+    Py_DECREF(args);
+    if (!resultObj)
+    {
+        PyErr_Print();
+    }
+    PyObject* songPath = PyDict_GetItemString(resultObj, "path");
+    PyObject* songTitle = PyDict_GetItemString(resultObj, "title");
+    
+    const char* path = PyString_AsString(songPath);
+    const char* title = PyString_AsString(songTitle);
+    
+    Py_DECREF(songPath);
+    Py_DECREF(songTitle);
+    Py_DECREF(resultObj);
+
+    return Song(string(path), string(title));
+}
 
 void SongLibState::Init() {
 
@@ -28,6 +71,7 @@ void SongLibState::Init() {
     m_curent_path = UserSetting::Get(SONG_LIB_DIR_SETTINGS_KEY, MUSICDIR);
     m_current_page = 0;
 
+    Song song = CallPlugInListSongs(m_base_path, m_curent_path);
     UpdateSongTiles();
 
     m_next_page_button = ButtonState(

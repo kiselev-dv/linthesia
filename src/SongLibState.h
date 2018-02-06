@@ -24,6 +24,19 @@ const int PagesButtonsY =
     Layout::ScreenMarginY + Layout::ScreenMarginY / 2 + 
     SongTileHeight / 2 - Layout::ButtonHeight/2;
 
+// Add folders support
+class Song {
+public:
+    Song(string path, string title):
+    m_path(path),
+    m_title(title){
+
+    }
+private:
+    string m_path;
+    string m_title;
+};
+
 class SongLibState : public GameState {
 
 public:
